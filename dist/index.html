@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Work through realistic A/B tests and decide when the evidence is strong enough to ship.">
+<title>SignalLab · A/B Testing Decision Lab</title>
+<link rel="stylesheet" href="./style.css">
+</head>
+<body>
+<header><div class="wrap mast"><a class="brand" href="./"><span class="mark" aria-hidden="true">▂▅▇</span> SignalLab</a><span class="mono header-note">A/B TESTING DECISION LAB</span><a class="method-link" href="#method">Method ↗</a></div></header>
+<main class="wrap">
+<div class="intro"><div class="eyebrow"><i></i> THE EXPERIMENT WORKBENCH</div><h1>Would you ship it?</h1><p>Read the experiment, make your call, then see what the data supports.</p></div>
+<nav aria-label="Example experiments" id="scenarios"></nav>
+<section class="brief" aria-labelledby="scenario-title">
+<div><div class="eyebrow" id="scenario-number"></div><h2 id="scenario-title"></h2><p id="description"></p></div>
+<dl id="assumptions"></dl>
+</section>
+<form id="experiment">
+<div class="section-line"><h2><small>01</small> Experiment data</h2><button type="button" class="text-button" id="reset-scenario">↺ Reset scenario</button></div>
+<div class="variants" id="variants"></div>
+<p id="error" role="status" class="error" hidden></p>
+<div class="section-line decision-title"><h2><small>02</small> Make your call</h2><span>Choose one</span></div>
+<fieldset id="choices"><legend class="sr-only">Your decision</legend></fieldset>
+<div class="actions"><span id="hint">The analysis unlocks after you make a decision.</span><button class="primary" id="submit" type="submit" disabled>Analyze Decision <span aria-hidden="true">→</span></button></div>
+</form>
+<section id="results" hidden aria-labelledby="result-title">
+<div class="section-line"><h2><small>03</small> The evidence</h2><span id="verdict" role="status"></span></div>
+<div class="recommendation"><div class="eyebrow">RECOMMENDATION</div><h3 id="result-title" tabindex="-1"></h3><p id="explanation"></p></div>
+<div id="metrics" class="metrics"></div>
+<div class="plots"><section class="panel"><h3>Conversion rates</h3><p>Observed rates and 95% intervals</p><div id="rate-plot"></div></section><section class="panel"><h3>Absolute lift</h3><p>Difference in percentage points</p><div id="lift-plot"></div></section></div>
+<section class="panel explore"><div><h3>Explore sample size</h3><p>Scale the entered counts together to see how sample size affects uncertainty. Counts round to whole numbers.</p></div><label>Sample multiplier <output id="multiple">1×</output><input id="scale" type="range" min="1" max="10" value="1"></label></section>
+</section>
+<details id="method"><summary>Method &amp; assumptions</summary>
+<div class="method-body"><p>Each rate is conversions divided by visitors. Absolute lift is B − A. Relative lift divides that difference by A’s rate and is undefined when A’s rate is zero.</p>
+<p>The 95% interval for the difference uses the unpooled normal approximation, Δ ± 1.96 × √[pA(1−pA)/nA + pB(1−pB)/nB]. The rate plots use individual normal intervals clipped to the possible 0–100% range.</p>
+<p>The two-sided z-test uses the pooled rate under the null hypothesis of equal rates. The p-value is the probability, under that hypothesis, of a z statistic at least as extreme as the one observed. The decision rules use the difference interval and compare the observed lift with the minimum practical lift.</p>
+<p>The analysis assumes independent visitors, random assignment, consistent tracking and a planned stopping point. It does not adjust for repeated peeking or multiple comparisons. Sparse outcomes can make these approximations unreliable.</p>
+<p>Estimated annual impact multiplies absolute lift by annual traffic and value per conversion. It assumes the measured lift persists.</p></div>
+</details>
+</main>
+<footer><div class="wrap foot"><strong>SignalLab</strong><span>A small workbench for experiment decisions.</span><span class="mono">BUILT FOR THE CURIOUS</span></div></footer>
+<script type="module" src="./app.mjs?v=1"></script>
+</body></html>
