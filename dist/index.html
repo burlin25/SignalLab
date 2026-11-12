@@ -18,16 +18,16 @@
 <form id="experiment">
 <div class="section-line"><h2><small>01</small> Experiment data</h2><button type="button" class="text-button" id="reset-scenario">↺ Reset scenario</button></div>
 <div class="variants" id="variants"></div>
-<p id="error" role="status" class="error" hidden></p>
+<p id="error" role="alert" class="error" hidden></p>
 <div class="section-line decision-title"><h2><small>02</small> Make your call</h2><span>Choose one</span></div>
 <fieldset id="choices"><legend class="sr-only">Your decision</legend></fieldset>
 <div class="actions"><span id="hint">The analysis unlocks after you make a decision.</span><button class="primary" id="submit" type="submit" disabled>Analyze Decision <span aria-hidden="true">→</span></button></div>
 </form>
 <section id="results" hidden aria-labelledby="result-title">
 <div class="section-line"><h2><small>03</small> The evidence</h2><span id="verdict" role="status"></span></div>
-<div class="recommendation"><div class="eyebrow">RECOMMENDATION</div><h3 id="result-title" tabindex="-1"></h3><p id="explanation"></p></div>
+<div class="recommendation" aria-live="polite"><div class="eyebrow">RECOMMENDATION</div><h3 id="result-title" tabindex="-1"></h3><p id="explanation"></p></div>
 <div id="metrics" class="metrics"></div>
-<div class="plots"><section class="panel"><h3>Conversion rates</h3><p>Observed rates and 95% intervals</p><div id="rate-plot"></div></section><section class="panel"><h3>Absolute lift</h3><p>Difference in percentage points</p><div id="lift-plot"></div></section></div>
+<div class="plots"><section class="panel"><h3>Conversion rates</h3><p>Observed rates and 95% intervals</p><div id="rate-plot"></div></section><section class="panel"><h3>Absolute lift</h3><p>Difference in percentage points. The dashed line marks the minimum worthwhile lift.</p><div id="lift-plot"></div></section></div>
 <section class="panel explore"><div><h3>Explore sample size</h3><p>Scale the entered counts together to see how sample size affects uncertainty. Counts round to whole numbers.</p></div><label>Sample multiplier <output id="multiple">1×</output><input id="scale" type="range" min="1" max="10" value="1"></label></section>
 </section>
 <details id="method"><summary>Method &amp; assumptions</summary>

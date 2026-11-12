@@ -38,16 +38,19 @@ function reset(next) {
   update();
 }
 
-function plot(id,rows,zero,format) {
+function plot(id,rows,zero,format,threshold=null) {
   const values=rows.flatMap(row=>row.slice(1));
   if(zero) values.push(0);
+  if(threshold !== null) values.push(threshold);
   const min=Math.min(...values), max=Math.max(...values);
   const spread=max-min || .001;
   const x=v=>53+((v-min)/spread)*246;
   const height=rows.length*35+30;
-  const label=rows.map(([name,p,l,h])=>`${name} ${format(p)}, interval ${format(l)} to ${format(h)}`).join('. ');
+  const thresholdLabel=threshold === null ? '' : ` Minimum worthwhile lift ${format(threshold)}.`;
+  const label=rows.map(([name,p,l,h])=>`${name} ${format(p)}, interval ${format(l)} to ${format(h)}`).join('. ')+thresholdLabel;
   $(id).innerHTML=`<svg viewBox="0 0 350 ${height}" role="img" aria-label="${label}" font-family="system-ui" font-size="11" fill="#546270">
     ${zero?`<line x1="${x(0)}" x2="${x(0)}" y1="0" y2="${height-23}" stroke="#8493a5" stroke-dasharray="3 3"/><text x="${x(0)}" y="${height-5}" text-anchor="middle">0 pp</text>`:''}
+    ${threshold !== null?`<line x1="${x(threshold)}" x2="${x(threshold)}" y1="0" y2="${height-23}" stroke="#b66a2b" stroke-dasharray="4 3"/><text x="${x(threshold)}" y="${height-5}" text-anchor="middle">${format(threshold)} target</text>`:''}
     ${rows.map(([name,p,l,h],i)=>{
       const y=18+i*35, color=i===0&&!zero?'#617183':'#2452ae';
       return `<text x="0" y="${y+4}">${name}</text><line x1="${x(l)}" x2="${x(h)}" y1="${y}" y2="${y}" stroke="${color}" stroke-width="2"/>${[l,h].map(v=>`<path d="M${x(v)} ${y-5}v10" stroke="${color}"/>`).join('')}<circle cx="${x(p)}" cy="${y}" r="4.5" fill="${color}"/><text x="350" y="${y+4}" text-anchor="end">${format(p)}</text>`;
@@ -83,7 +86,7 @@ function update() {
   const metrics=[['A conversion rate',pct(a)],['B conversion rate',pct(b)],['Absolute lift',signed(lift,points)],['Relative lift',relative===null?'Undefined':signed(relative,pct)],['95% lift interval',`${points(lo)} to ${points(hi)}`],['Two-sided p-value',p<.0001?'&lt; 0.0001':p.toFixed(4)],['Estimated annual impact',money.format(lift*s.traffic*s.value)]];
   $('metrics').innerHTML=metrics.map(([label,value])=>`<div class="metric"><span>${label}</span><strong>${value}</strong></div>`).join('');
   plot('rate-plot',ranges.map((range,i)=>['AB'[i],...range]),false,pct);
-  plot('lift-plot',[['B − A',lift,lo,hi]],true,points);
+  plot('lift-plot',[['B − A',lift,lo,hi]],true,points,s.minimum);
   $('multiple').textContent=scale.value+'×';
 }
 
